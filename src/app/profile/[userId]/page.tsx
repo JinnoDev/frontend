@@ -122,8 +122,7 @@ export default function UserProfilePage() {
               className="aspect-square rounded-sm overflow-hidden bg-[#141414] relative group cursor-pointer">
               {post.mediaUrl
                 ? <img src={post.mediaUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }/>
                 : <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] text-gray-600 text-xs p-2 text-center">{post.caption?.slice(0, 30)}</div>}
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                 <span className="text-white text-xs font-bold">♥ {post.likesCount}</span>
