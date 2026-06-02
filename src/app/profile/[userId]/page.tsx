@@ -56,14 +56,21 @@ export default function UserProfilePage() {
         setFollowing(true);
         setProfile((p: any) => p ? { ...p, followersCount: p.followersCount + 1 } : p);
       }
-    } catch (err: any) { toast.error(err.response?.data?.message || 'Error'); }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Error');
+    }
   };
 
   const handleMessage = async () => {
     setStartingChat(true);
-    try { const res = await chatsApi.createChat([userId]); router.push(`/messages?chat=${res.data._id}`); }
-    catch { toast.error('Error al abrir chat'); }
-    finally { setStartingChat(false); }
+    try {
+      const res = await chatsApi.createChat([userId]);
+      router.push(`/messages?chat=${res.data._id}`);
+    } catch {
+      toast.error('Error al abrir chat');
+    } finally {
+      setStartingChat(false);
+    }
   };
 
   const updatePost = (id: string, changes: Partial<PostData>) => {
@@ -71,8 +78,23 @@ export default function UserProfilePage() {
     if (selectedPost?._id === id) setSelectedPost(p => p ? { ...p, ...changes } : p);
   };
 
-  if (loading) return <AppLayout><div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-[#c9a84c] border-t-transparent rounded-full animate-spin" /></div></AppLayout>;
-  if (!profile) return <AppLayout><div className="text-center py-20 text-gray-500">Usuario no encontrado</div></AppLayout>;
+  if (loading) {
+    return (
+        <AppLayout>
+          <div className="flex justify-center py-20">
+            <div className="w-8 h-8 border-2 border-[#c9a84c] border-t-transparent rounded-full animate-spin" />
+          </div>
+        </AppLayout>
+    );
+  }
+
+  if (!profile) {
+    return (
+        <AppLayout>
+          <div className="text-center py-20 text-gray-500">Usuario no encontrado</div>
+        </AppLayout>
+    );
+  }
 
   const isOwn = user?._id === profile._id;
 
@@ -88,13 +110,18 @@ export default function UserProfilePage() {
                 <h1 className="text-xl font-semibold text-white">{profile.username}</h1>
                 {!isOwn && (
                     <>
-                      <button onClick={handleFollow}
-                              className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors ${following ? 'border border-[#2a2a2a] text-white hover:bg-[#1a1a1a]' : 'bg-[#c9a84c] text-black hover:bg-[#e4c46a]'}`}>
+                      <button
+                          onClick={handleFollow}
+                          className={`px-5 py-1.5 rounded-lg text-sm font-semibold transition-colors ${following ? 'border border-[#2a2a2a] text-white hover:bg-[#1a1a1a]' : 'bg-[#c9a84c] text-black hover:bg-[#e4c46a]'}`}
+                      >
                         {following ? 'Siguiendo' : 'Seguir'}
                       </button>
-                      <button onClick={handleMessage} disabled={startingChat}
-                              className="w-9 h-9 rounded-lg border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-[#c9a84c] hover:border-[#c9a84c] transition-colors"
-                              title="Enviar mensaje">
+                      <button
+                          onClick={handleMessage}
+                          disabled={startingChat}
+                          className="w-9 h-9 rounded-lg border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-[#c9a84c] hover:border-[#c9a84c] transition-colors"
+                          title="Enviar mensaje"
+                      >
                         <MessageCircle size={17} />
                       </button>
                     </>
@@ -118,12 +145,23 @@ export default function UserProfilePage() {
 
           <div className="grid grid-cols-3 gap-1">
             {posts.map(post => (
-                <div key={post._id} onClick={() => setSelectedPost(post)}
-                     className="aspect-square rounded-sm overflow-hidden bg-[#141414] relative group cursor-pointer">
-                  {post.mediaUrl
-                      ? <img src={post.mediaUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                      : <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] text-gray-600 text-xs p-2 text-center">{post.caption?.slice(0, 30)}</div>}
+                <div
+                    key={post._id}
+                    onClick={() => setSelectedPost(post)}
+                    className="aspect-square rounded-sm overflow-hidden bg-[#141414] relative group cursor-pointer"
+                >
+                  {post.mediaUrl ? (
+                      <img
+                          src={post.mediaUrl}
+                          alt=""
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                  ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] text-gray-600 text-xs p-2 text-center">
+                        {post.caption?.slice(0, 30)}
+                      </div>
+                  )}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                     <span className="text-white text-xs font-bold">♥ {post.likesCount}</span>
                     <span className="text-white text-xs font-bold">💬 {post.commentsCount}</span>
@@ -134,7 +172,11 @@ export default function UserProfilePage() {
         </div>
 
         {selectedPost && (
-            <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} onUpdate={changes => updatePost(selectedPost._id, changes)} />
+            <PostModal
+                post={selectedPost}
+                onClose={() => setSelectedPost(null)}
+                onUpdate={changes => updatePost(selectedPost._id, changes)}
+            />
         )}
         {followModal && profile && (
             <FollowListModal userId={profile._id} mode={followModal} onClose={() => setFollowModal(null)} />
