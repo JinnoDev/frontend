@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #141414;
+  --bg-card: #1a1a1a;
+  --bg-hover: #222222;
+  --border: #2a2a2a;
+  --gold: #c9a84c;
+  --gold-light: #e4c46a;
+  --online: #22c55e;
+  --text-muted: #888888;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg-primary);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }
+
+/* Logo SVG styling */
+.logo-ring { stroke: #c9a84c; fill: none; stroke-width: 1.5; }
+.logo-dot { fill: #c9a84c; }
+
+/* Post grid hover */
+.post-thumb { position: relative; overflow: hidden; cursor: pointer; }
+.post-thumb img { transition: transform 0.3s ease; }
+.post-thumb:hover img { transform: scale(1.05); }
+.post-thumb-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.post-thumb:hover .post-thumb-overlay { opacity: 1; }
+
+/* Input focus */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #c9a84c !important;
+}
+
+/* Sidebar active */
+.nav-active { color: #c9a84c !important; }
