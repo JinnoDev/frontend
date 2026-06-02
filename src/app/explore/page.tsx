@@ -43,8 +43,7 @@ export default function ExplorePage() {
                   {post.mediaUrl ? (
                     <img src={post.mediaUrl} alt=""
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}/>
                   ) : (
                     <div className="w-full h-full bg-[#1a1a1a] flex items-center justify-center text-gray-600 text-xs p-2 text-center">{post.caption?.slice(0, 40) || '📷'}</div>
                   )}
