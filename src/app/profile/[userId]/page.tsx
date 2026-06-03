@@ -30,6 +30,10 @@ export default function UserProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!userId || userId === 'undefined') {
+      router.replace('/');
+      return;
+    }
     Promise.all([
       usersApi.getProfile(userId),
       postsApi.getPostsByUser(userId),
