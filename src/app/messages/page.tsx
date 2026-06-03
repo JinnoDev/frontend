@@ -126,8 +126,10 @@ function MessagesInner() {
       const res = await chatsApi.getChats();
       const rawChats: Chat[] = res.data.data || [];
       const enriched = await Promise.all(rawChats.map(async (chat) => {
-        const otherId = chat.participants.find((p: string) => p && p !== user._id);
-        if (!otherId || otherId === 'undefined') return chat;
+        const otherId = chat.participants
+            .map(String)
+            .find((p: string) => p && p !== 'undefined' && p !== user._id);
+        if (!otherId) return chat;
         try {
           const uRes = await usersApi.getProfile(otherId);
           return { ...chat, otherUser: { _id: uRes.data._id, username: uRes.data.username, avatar: uRes.data.avatar } };
