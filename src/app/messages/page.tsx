@@ -49,7 +49,7 @@ function MessagesInner() {
   const activeChatRef = useRef<Chat | null>(null);
 
   // Get token for socket auth
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const token = typeof window !== 'undefined' ? document.cookie.match(/accessToken=([^;]+)/)?.[1] ?? null : null;
   const { joinChat, leaveChat, sendMessage: socketSend, onNewMessage, onChatUpdated } = useSocket(token);
 
   // Keep activeChatRef in sync
@@ -126,8 +126,8 @@ function MessagesInner() {
       const res = await chatsApi.getChats();
       const rawChats: Chat[] = res.data.data || [];
       const enriched = await Promise.all(rawChats.map(async (chat) => {
-        const otherId = chat.participants.find((p: string) => p !== user._id);
-        if (!otherId) return chat;
+        const otherId = chat.participants.find((p: string) => p && p !== user._id);
+        if (!otherId || otherId === 'undefined') return chat;
         try {
           const uRes = await usersApi.getProfile(otherId);
           return { ...chat, otherUser: { _id: uRes.data._id, username: uRes.data.username, avatar: uRes.data.avatar } };
